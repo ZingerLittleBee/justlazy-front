@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <show-more />
+  <div class="bg-gray-50 flex justify-center items-center flex-col">
+    <show-more class="w-1/2" />
     <shot-chart class="w-1/6" />
   </div>
 </template>
