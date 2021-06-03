@@ -1,6 +1,6 @@
 <template>
-  <div class="m-4 flex flex-col shadow-xl rounded-lg">
-    <div class="bg-white flex justify-between content-center p-2">
+  <div class="bg-white m-4 flex flex-col shadow-xl rounded-lg">
+    <div class="flex justify-between content-center p-2">
       <span
         class="
           bg-clip-text
@@ -12,7 +12,7 @@
           font-extrabold
         "
       >
-        Hello world
+        <slot name="title">Server</slot>
       </span>
       <i
         class="
@@ -24,7 +24,7 @@
         "
       ></i>
     </div>
-    <div class="h-16"></div>
+    <div><slot name="detail"></slot></div>
   </div>
 </template>
 

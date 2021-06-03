@@ -3,19 +3,26 @@
     class="
       m-4
       flex
-      shadow-xl
-      rounded-lg
+      shadow-md
       bg-white
       flex
       justify-between
       content-center
-      px-4
+      pl-1
+      pr-4
       py-2
       rounded-full
+      focus-within:ring-2
+      ring-indigo-300
+      space-x-1
     "
   >
-    <el-input v-model="inputValue" />
-    <el-button>搜索</el-button>
+    <el-input
+      v-model="inputValue"
+      size="mini"
+      placeholder="search what you want"
+    />
+    <el-button size="mini" class="focus:ring-2">搜索</el-button>
   </div>
 </template>
 
@@ -35,7 +42,7 @@ export default defineComponent({
 
 <style scoped>
 ::v-deep(.el-input__inner) {
-  @apply text-2xl;
+  @apply text-xl;
   border: none;
 }
 </style>
