@@ -1,5 +1,6 @@
 <template>
   <div class="bg-gray-50 flex justify-center items-center flex-col">
+    <search-box />
     <show-more class="w-1/2" />
     <shot-chart class="w-1/6" />
   </div>
@@ -9,12 +10,14 @@
 import { defineComponent, ref } from 'vue'
 import ShotChart from '@/components/ShotChart/index.vue'
 import ShowMore from '@/components/ShowMore/index.vue'
+import SearchBox from '@/components/SearchBox/index.vue'
 
 export default defineComponent({
   name: 'App',
   components: {
     ShotChart,
-    ShowMore
+    ShowMore,
+    SearchBox
   },
   setup() {
     const isShow = ref(true)
