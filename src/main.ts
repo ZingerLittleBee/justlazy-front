@@ -1,4 +1,5 @@
 import { createApp } from 'vue'
+import router from './router'
 import App from './App.vue'
 import './index.css'
 
@@ -32,4 +33,9 @@ use([
   LegendComponent
 ])
 
-createApp(App).component('svg-icon', SvgIcon).component('v-chart', ECharts).use(ElementPlus).mount('#app')
+createApp(App)
+  .component('svg-icon', SvgIcon)
+  .component('v-chart', ECharts)
+  .use(router)
+  .use(ElementPlus)
+  .mount('#app')
