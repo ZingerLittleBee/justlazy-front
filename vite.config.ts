@@ -9,6 +9,15 @@ function resolve(dir: string) {
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  server: {
+    proxy: {
+      '/ws': {
+        target: 'http://localhost:3001/',
+        changeOrigin: true,
+        rewrite: path => path.replace(/^\/ws/, '')
+      }
+    }
+  },
   plugins: [
     vue(),
     viteSvgIcons({

@@ -1,7 +1,10 @@
 import { createApp } from 'vue'
+import store from './store'
 import router from './router'
 import App from './App.vue'
 import './index.css'
+
+import naive from 'naive-ui'
 
 import ElementPlus from 'element-plus'
 import 'element-plus/lib/theme-chalk/index.css'
@@ -36,6 +39,8 @@ use([
 createApp(App)
   .component('svg-icon', SvgIcon)
   .component('v-chart', ECharts)
+  .use(store)
   .use(router)
   .use(ElementPlus)
+  .use(naive)
   .mount('#app')

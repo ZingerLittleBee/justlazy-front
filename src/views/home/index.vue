@@ -1,5 +1,5 @@
 <template>
-  <div class="p-4 w-full h-full flex justify-center">
+  <div class="p-2 w-full h-full flex justify-center">
     <draggable
       :list="list"
       :disabled="!enabled"
@@ -11,33 +11,27 @@
     >
       <template #item="{ element }">
         <transition name="bounce">
-          <el-card
-            class="box-card"
-            :class="[
-              { 'not-draggable': !enabled },
-              { 'col-span-full': !!element['showMore'] }
-            ]"
-          >
+          <el-card class="box-card" :class="[{ 'not-draggable': !enabled }]">
             <template #header>
               <div
                 class="card-header flex flex-row items-center justify-between"
               >
                 <div class="space-x-4">
                   <span>Server {{ element.id }}</span>
-                  <el-tag>在线</el-tag>
+                  <n-tag type="success">在线</n-tag>
+                  <span>KVM</span>
                 </div>
                 <div class="flex items-center space-x-4">
                   <el-button class="button" type="text">详情</el-button>
                   <el-button
                     type="text"
-                    icon="el-icon-arrow-right"
-                    @click="handlerShowMore($event, element.id)"
-                    class="
-                      text-black
-                      bg-white
-                      rounded-lg
-                      focus:outline-none focus:ring-2 focus:ring-blue-600
+                    :icon="
+                      element.showMore
+                        ? 'el-icon-arrow-left'
+                        : 'el-icon-arrow-right'
                     "
+                    @click="handlerShowMore($event, element.id)"
+                    class="home__header--icon"
                   />
                 </div>
               </div>
@@ -51,19 +45,30 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, onMounted, computed } from 'vue'
+import { NTag } from 'naive-ui'
 import draggable from 'vuedraggable/src/vuedraggable'
 import DetailBox from '@/components/DetailBox/index.vue'
+import { useStore } from 'vuex'
 
 export default defineComponent({
   name: 'Home',
   components: {
+    NTag,
     draggable,
     DetailBox
   },
   display: 'Simple',
   order: 0,
   setup() {
+    const store = useStore()
+    const socket = computed(() => store.getters.getSocket)
+    onMounted(async () => {
+      await store.dispatch('initSocket', {
+        url: 'http://localhost:9527/servers',
+        opts: { auth: { token: '123' } }
+      })
+    })
     const handlerShowMore = (e: MouseEvent, id: number) => {
       list.value.forEach(l => {
         l.id === id ? (l['showMore'] = !l['showMore']) : null
@@ -93,8 +98,18 @@ export default defineComponent({
   opacity: 0.5;
   background: #c8ebfb;
 }
+::v-deep(.el-card__header) {
+  padding: 6px 15px;
+}
+::v-deep(.el-card__body) {
+  padding: 5px 5px 10px;
+}
 .list-group {
-  @apply w-10/12 grid grid-cols-1 sm:grid-cols-2 gap-10 justify-center;
+  @apply w-10/12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 justify-center;
+}
+
+::v-deep(.home__header--icon) {
+  @apply w-6 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-200 focus:bg-gray-200 hover:bg-gray-200;
 }
 
 .bounce-enter-active {
