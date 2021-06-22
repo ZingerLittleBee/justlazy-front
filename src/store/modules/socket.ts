@@ -12,7 +12,8 @@ const module: Module<SocketProps, any> = {
     serverData: ''
   },
   getters: {
-    getSocket: state => state.socket
+    getSocket: state => state.socket,
+    getServerData: state => state.serverData
   },
   mutations: {
     CREATE_SOCKET: (state, payload) => {
@@ -28,10 +29,11 @@ const module: Module<SocketProps, any> = {
         ...opts,
         transports: ['websocket']
       })
-      return new Promise(resolve => {
+      return new Promise<void>(resolve => {
         socket.on('connect', async () => {
           console.log('socket connect success')
           commit('CREATE_SOCKET', socket)
+          socket.emit('start-servers-listener')
           socket.on('servers-message', e => {
             commit('UPDATE_SERVER_DATA', e)
           })

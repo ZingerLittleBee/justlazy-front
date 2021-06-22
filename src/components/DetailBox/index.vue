@@ -27,7 +27,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, reactive } from 'vue'
 import { NTag } from 'naive-ui'
 import GaugeChart from '@/components/charts/GaugeChart/index.vue'
 import PieChart from '@/components/charts/PieChart/index.vue'
@@ -40,15 +40,18 @@ export default defineComponent({
     PieChart
   },
   props: {
+    data: {
+      type: Object
+    },
     showMore: {
       type: Boolean,
       default: () => false
     }
   },
-  setup() {
-    const cpuChartData = ref([
+  setup(props) {
+    const cpuChartData = reactive([
       {
-        value: 80,
+        value: props.data?.CPU.used,
         detail: {
           offsetCenter: ['0%', '0%'],
           formatter: '{value}%',
@@ -97,12 +100,12 @@ export default defineComponent({
       }
     ])
 
-    setInterval(() => {
-      cpuChartData.value[0].value = ~~(Math.random() * 100)
-      ramChartData.value.forEach(r => (r.value = ~~(Math.random() * 100)))
-      networkChartData.value.forEach(n => (n.value = ~~(Math.random() * 100)))
-      ioChartData.value.forEach(i => (i.value = ~~(Math.random() * 100)))
-    }, 2000)
+    // setInterval(() => {
+    //   cpuChartData.value[0].value = ~~(Math.random() * 100)
+    //   ramChartData.value.forEach(r => (r.value = ~~(Math.random() * 100)))
+    //   networkChartData.value.forEach(n => (n.value = ~~(Math.random() * 100)))
+    //   ioChartData.value.forEach(i => (i.value = ~~(Math.random() * 100)))
+    // }, 2000)
 
     return {
       cpuChartData,

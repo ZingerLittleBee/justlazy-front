@@ -36,7 +36,10 @@
                 </div>
               </div>
             </template>
-            <detail-box :show-more="!!element['showMore']" />
+            <detail-box
+              :data="socketData[element.id]"
+              :show-more="!!element['showMore']"
+            />
           </el-card>
         </transition>
       </template>
@@ -63,6 +66,7 @@ export default defineComponent({
   setup() {
     const store = useStore()
     const socket = computed(() => store.getters.getSocket)
+    const socketData = computed(() => store.getters.getServerData)
     onMounted(async () => {
       await store.dispatch('initSocket', {
         url: 'http://localhost:9527/servers',
@@ -84,6 +88,7 @@ export default defineComponent({
     const dragging = ref(false)
 
     return {
+      socketData,
       enabled,
       list,
       dragging,
