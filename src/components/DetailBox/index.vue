@@ -27,7 +27,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, reactive } from 'vue'
+import { watch, defineComponent, ref, toRefs, watchEffect } from 'vue'
 import { NTag } from 'naive-ui'
 import GaugeChart from '@/components/charts/GaugeChart/index.vue'
 import PieChart from '@/components/charts/PieChart/index.vue'
@@ -49,9 +49,9 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const cpuChartData = reactive([
+    const cpuChartData = [
       {
-        value: props.data?.CPU.used,
+        value: ref(0),
         detail: {
           offsetCenter: ['0%', '0%'],
           formatter: '{value}%',
@@ -60,12 +60,12 @@ export default defineComponent({
           }
         }
       }
-    ])
+    ]
 
     const ramChartData = ref([
-      { value: 1048, name: '已使用' },
-      { value: 735, name: '已缓存' },
-      { value: 580, name: '未使用' }
+      { value: 0, name: '已使用' },
+      { value: 0, name: '已缓存' },
+      { value: 0, name: '未使用' }
     ])
 
     const downDetail = {
@@ -80,14 +80,20 @@ export default defineComponent({
 
     const networkChartData = ref([
       {
-        value: 20,
+        value: 0,
         detail: downDetail
       },
       {
-        value: 40,
+        value: 0,
         detail: upDetail
       }
     ])
+
+    // TODO 图表比列不合理
+    const unitConvert = (byte: number) => {
+      let showValue = (((byte / 1024) * 8) / 10240) * 100
+      return showValue.toFixed(2)
+    }
 
     const ioChartData = ref([
       {
@@ -99,6 +105,18 @@ export default defineComponent({
         detail: upDetail
       }
     ])
+
+    watchEffect(() => {
+      cpuChartData[0].value.value = props.data?.CPU.used
+      ramChartData.value[0].value = props.data?.RAM.used
+      ramChartData.value[1].value = props.data?.RAM.cache
+      ramChartData.value[2].value = props.data?.RAM.free
+      networkChartData.value[0].value = Number(unitConvert(props.data?.NET.tx))
+      console.log('tx', unitConvert(props.data?.NET.tx))
+      networkChartData.value[1].value = Number(unitConvert(props.data?.NET.rx))
+      ioChartData.value[0].value = props.data?.ROM.read
+      ioChartData.value[1].value = props.data?.ROM.write
+    })
 
     // setInterval(() => {
     //   cpuChartData.value[0].value = ~~(Math.random() * 100)
