@@ -69,13 +69,22 @@ export default defineComponent({
           },
           data: props.data,
           detail: {
-            width: 24,
-            height: 10,
-            fontSize: 10,
+            width: 30,
+            height: 12,
+            lineHeight: 12,
+            fontSize: 12,
             color: 'inherit',
             borderColor: 'inherit',
             borderRadius: 20,
-            borderWidth: 1
+            borderWidth: 1,
+            rich: {
+              unitStyle: {
+                fontSize: 8,
+                verticalAlign: 'bottom',
+                color: '#6B7280'
+              }
+            },
+            formatter: '12321'
           }
         }
       ]

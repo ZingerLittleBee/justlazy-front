@@ -3,9 +3,16 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, onMounted } from 'vue'
+import { GetServers } from './api/serverProperties'
 
 export default defineComponent({
-  name: 'App'
+  name: 'App',
+  setup() {
+    onMounted(async () => {
+      const data = await GetServers()
+      console.log('data', data)
+    })
+  }
 })
 </script>

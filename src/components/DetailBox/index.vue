@@ -68,41 +68,51 @@ export default defineComponent({
       { value: 0, name: '未使用' }
     ])
 
-    const downDetail = {
-      offsetCenter: ['0', '-25%'],
-      formatter: `{value}↓`
-    }
-
-    const upDetail = {
-      offsetCenter: ['0', '25%'],
-      formatter: `{value}↑`
-    }
-
     const networkChartData = ref([
       {
         value: 0,
-        detail: downDetail
+        detail: {
+          offsetCenter: ['0', '-25%'],
+          borderWidth: 0,
+          formatter: (value: number) => {
+            if (value > 1000) {
+              return `${(value / 1024).toFixed(0)}{unitStyle|Mb/s}↑`
+            }
+            return `${value.toFixed(0)}{unitStyle|Kb/s}↑`
+          }
+        }
       },
       {
         value: 0,
-        detail: upDetail
+        detail: {
+          offsetCenter: ['0', '25%'],
+          borderWidth: 0,
+          formatter: (value: number) => {
+            if (value > 1000) {
+              return `${(value / 1024).toFixed(0)}{unitStyle|Mb/s}↓`
+            }
+            return `${value.toFixed(0)}{unitStyle|Kb/s}↓`
+          }
+        }
       }
     ])
-
-    // TODO 图表比列不合理
-    const unitConvert = (byte: number) => {
-      let showValue = (((byte / 1024) * 8) / 10240) * 100
-      return showValue.toFixed(2)
-    }
 
     const ioChartData = ref([
       {
         value: 20,
-        detail: downDetail
+        detail: {
+          offsetCenter: ['0', '-25%'],
+          formatter: `{value}{unitStyle|Kb/s}↓`,
+          borderWidth: 0
+        }
       },
       {
         value: 40,
-        detail: upDetail
+        detail: {
+          offsetCenter: ['0', '25%'],
+          formatter: `{value}{unitStyle|Kb/s}↑`,
+          borderWidth: 0
+        }
       }
     ])
 
@@ -111,9 +121,8 @@ export default defineComponent({
       ramChartData.value[0].value = props.data?.RAM.used
       ramChartData.value[1].value = props.data?.RAM.cache
       ramChartData.value[2].value = props.data?.RAM.free
-      networkChartData.value[0].value = Number(unitConvert(props.data?.NET.tx))
-      console.log('tx', unitConvert(props.data?.NET.tx))
-      networkChartData.value[1].value = Number(unitConvert(props.data?.NET.rx))
+      networkChartData.value[0].value = (props.data?.NET.tx / 1024) * 8
+      networkChartData.value[1].value = (props.data?.NET.rx / 1024) * 8
       ioChartData.value[0].value = props.data?.ROM.read
       ioChartData.value[1].value = props.data?.ROM.write
     })
